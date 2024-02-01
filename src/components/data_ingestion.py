@@ -20,3 +20,12 @@ class DataIngestion:
         self.ingestion_config=Data_IngestionConfig()
     
     def start_data_ingestion(self):
+        logging.info("Entered data ingestion component")
+        try:
+            df = pd.read_csv('notebook\data\stud.csv')
+            logging.info("Converted to dataframe")
+            
+            os.makedirs(os.path.dirname(self.ingestion_config.train_data_path),exist_ok=True)
+            df.to_csv(self.ingestion_config.train_data_path)
+        except:
+            pass
