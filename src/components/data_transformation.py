@@ -21,6 +21,9 @@ class DataTransformation:
         self.data_transformation_config = DataTransformationConfig()
 
     def get_data_transformer_object(self):
+        '''
+        This function performs data transformation
+        '''
         try:
             numerical_columns = ["writing_score", "reading_score"]
             categorical_columns = [
@@ -49,8 +52,10 @@ class DataTransformation:
 
             preprocessor = ColumnTransformer(
                 [
-                    ("num_pipeline", num_pipeline, numerical_columns)
+                    ("num_pipeline", num_pipeline, numerical_columns),
+                    ("cat_pipeline", cat_pipeline, categorical_columns)
                 ]
             )
-        except:
-            pass
+            return preprocessor
+        except Exception as e:
+            raise CustomException(e,sys)
