@@ -14,7 +14,7 @@ from src.logger import logging
 
 @dataclass
 class DataTransformationConfig:
-    preprocess_obj_file_path = os.path.join('artifact', 'preprocessor.pkl')
+    preprocess_obj_file_path = os.path.join('artifacts', 'preprocessor.pkl')
 
 class DataTransformation:
     def __init__(self):
@@ -82,6 +82,17 @@ class DataTransformation:
             logging.info("Applying preprocessor")
 
             input_feature_train_arr = preprocessing_obj.fit_transform(input_feature_train_)
-            input_feature_train_arr = preprocessing_obj.transform(input_feature_test_)
-        except:
-            pass
+            input_feature_test_arr = preprocessing_obj.transform(input_feature_test_)
+        
+            train_arr = np.c_[
+                input_feature_train_arr, np.array(target_feature_train_)
+            ]
+
+            test_arr = np.c_[
+                input_feature_test_arr, np.array(target_feature_test_)
+            ]
+            logging.info(f"Saved preprocessing object")
+
+            return (train_arr,test_arr, self.data_transformation_config.preprocess_obj_file_path)
+        except Exception as e:
+            raise CustomException(e, sys)
